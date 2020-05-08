@@ -1,0 +1,45 @@
+{
+    "name": "jeremy_elam_p1_api",
+    "version": "1.0.0",
+    "description": "api for projcet 1",
+    "main": "index.js",
+    "scripts": {
+        "start": "tsc && node ./build/index.js",
+        "test": "jest --watch",
+        "coverage": "jest --coverage"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/200406-java-react-usf/jeremy_elam_p1_API.git"
+    },
+    "keywords": [
+        "Node",
+        "JS"
+    ],
+    "author": "jeremy elam",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/200406-java-react-usf/jeremy_elam_p1_API/issues"
+    },
+    "homepage": "https://github.com/200406-java-react-usf/jeremy_elam_p1_API#readme",
+    "dependencies": {
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "express-session": "^1.17.1",
+        "pg": "^8.1.0"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.6",
+        "@types/express-session": "^1.17.0",
+        "@types/jest": "^25.2.1",
+        "@types/node": "^13.13.5",
+        "@typescript-eslint/eslint-plugin": "^2.31.0",
+        "@typescript-eslint/parser": "^2.31.0",
+        "eslint": "^6.8.0",
+        "jest": "^26.0.1",
+        "morgan": "^1.10.0",
+        "ts-jest": "^25.5.0",
+        "ts-node": "^8.10.1",
+        "typescript": "^3.8.3"
+    }
+}
