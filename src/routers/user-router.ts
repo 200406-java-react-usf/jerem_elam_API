@@ -8,11 +8,76 @@ export const UserRouter = express.Router();
 
 const UserService = AppConfig.userService;
 
-UserRouter.get('', async(req, resp)=>{
+
+
+UserRouter.get('', async (req, resp)=>{
 	try{
-		let payload = await UserService.getAllUsers();
-		resp.status(200).json(payload);
+		
+		let reqURL =url.parse(req.url,true);
+		if(!isEmptyObject<ParsedUrlQuery>(reqURL.query)){
+			let payload = await UserService.getUserByUniqueKey({...reqURL.query});
+			resp.status(200).json(payload);
+		} else{
+			let payload = await UserService.getAllUsers();
+			resp.status(200).json(payload);
+		}
 	}catch(e){
 		resp.status(e.statusCode).json(e);
+	}
+});
+
+UserRouter.get('/role/:role', async(req, resp) =>{
+	const role = req.params.role;
+
+	console.log(role + ' 1');
+	
+	try{
+		let payload = await UserService.getAllUsersByRole(role);
+		return resp.status(200).json(payload);
+	}catch(e){
+		return resp.status(e.statusCode).json(e);
+	}
+})
+
+UserRouter.get('/:id', async(req, resp) =>{
+	const id = +req.params.id;
+	try{
+		let payload = await UserService.getUserById(id);
+		return resp.status(200).json(payload);
+	}catch(e){
+		return resp.status(e.statusCode).json(e);
+	}
+});
+
+UserRouter.post('',async (req, resp) =>{
+	try{
+		let newUser = await UserService.addNewUser(req.body);
+		return resp.status(201).json(newUser);
+	} catch(e){
+		return resp.status(e.statusCode).json(e);
+	}
+});
+
+UserRouter.delete('', async(req, resp) =>{
+	console.log(req.body);
+	
+	try{
+		let payload = await UserService.deleteUserById(req.body);
+		return resp.status(202).json(payload);
+	}catch(e){
+		return resp.status(e.statusCode).json(e);
+	}
+});
+
+UserRouter.put('', async(req, resp) =>{
+	console.log('1 repo');
+	try{
+		console.log('2 repo');
+		let payload = await UserService.updateUser(req.body);
+		console.log('3 repo');
+
+		return resp.status(201).json(payload);
+	}catch (e){
+		return resp.status(e.statusCode).json(e);
 	}
 });
