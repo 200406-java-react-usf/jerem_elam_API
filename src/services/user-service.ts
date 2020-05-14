@@ -30,7 +30,6 @@ export class UserService{
 		}
 
 		let users = await this.userRepo.getAllByRole(role);
-		console.log(users);
 		
 		if(users.length === 0){
 			throw new ResourceNotFoundError();
@@ -136,21 +135,17 @@ export class UserService{
 
 	async isValidRole(role: string):Promise<boolean>{
 		try{
-			let response = await this.getUserByUniqueKey({'role_name': role});
-			if(typeof response == 'undefined'){
-				return false
-			}
+			await this.getUserByUniqueKey({'role_name': role});
 		}catch(e){
+			console.log('role is not in database');
 			return false;
 		}
+		console.log('role is in database');
 		return true;
 	}
 	async isUsernameAvailable(un: string): Promise<boolean>{
 		try{
-		let response = await this.getUserByUniqueKey({'username':un});
-		if(typeof response == 'undefined'){
-			return true
-		}
+		await this.getUserByUniqueKey({'username':un});
 		}catch(e){
 			console.log('username is available');
 			return true
