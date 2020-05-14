@@ -40,8 +40,8 @@ export class UserRepository{
 		let client: PoolClient;
 		try{
 			client = await connectionPool.connect();
-			let sql = `${this.baseQuery} where ers_user_id = ${id};`;
-			let rs = await client.query(sql);
+			let sql = `${this.baseQuery} where ers_user_id = $1;`;
+			let rs = await client.query(sql, [id]);
 			return rs.rows[0];
 		}catch(e){
 			throw new InternalServerError();
