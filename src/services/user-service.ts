@@ -163,6 +163,18 @@ export class UserService{
 		console.log('email is not available');
 		return false;
 	}
+
+	async authUser(username: string, password: string): Promise<Users>{
+        let authUser: Users;
+        
+        if(!isValidStrings(username) || !isValidStrings(password)){
+            throw new BadRequestError('Given username and/or password are not valid strings.');
+        }
+
+        authUser = await this.userRepo.getUserByCreds(username, password);
+
+        return (authUser);
+    }
 		
 	
 	removePassword(user: Users): Users {

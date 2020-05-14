@@ -51,6 +51,20 @@ export class ReimbService{
 		return reimb;
 	}
 
+	async deleteReimbById(id: object): Promise<boolean>{
+		let keys = Object.keys(id);
+		if(!keys.every(key=> isPropertyOf(key, Reimbursements))){
+			throw new BadRequestError('Invalid key given');
+		}
+		let key = keys[0];
+		let value = +id[key];
+		if(!isValidId(value)){
+			throw new BadRequestError();
+		}
+		await this.reimbRepo.deleteById(value);
+		return true;
+	}
+
 	//need to add second to make sure the string given is a type in database. for now mvp
 	async getAllReimbByType(type:string): Promise<Reimbursements[]>{
 		if(!isValidStrings(type)){

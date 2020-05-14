@@ -88,5 +88,18 @@ export class ReimbRepository{
 			client && client.release();
 		}
 	}
+	async deleteById(id:number): Promise<boolean>{
+		let client: PoolClient;
+		try{
+			client = await connectionPool.connect();
+			let sql = 'delete from ers_reimbursements where reimb_id = $1;';
+			let rs = await client.query(sql, [id]);
+			return rs.rows[0];
+		}catch(e){
+			throw new InternalServerError();
+		}finally{
+			client && client.release();
+		}
+	}
 
 }
