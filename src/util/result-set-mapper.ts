@@ -1,7 +1,7 @@
 import {UserSchema} from './schemas';
 import {ReimbursementsSchema} from './schemas';
 import {Users} from '../models/users';
-import {Reimbursements} from '../models/reimbursements';
+import {Reimbursements} from '../models/reimb';
 
 export function mapUserResultSet(resultSet: UserSchema){
 	if(!resultSet){
