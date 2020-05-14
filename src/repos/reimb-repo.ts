@@ -65,7 +65,7 @@ export class ReimbRepository{
 		let client: PoolClient;
 		try{
 			client = await connectionPool.connect();
-			let sql = `${this.baseQuery} where reimb_type = $1 `;
+			let sql = `${this.baseQuery} where reimb_status = $1 `;
 			let rs = await client.query(sql, [status]);
 			return rs.rows
 		}catch(e){
