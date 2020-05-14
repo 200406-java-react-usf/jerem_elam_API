@@ -6,6 +6,7 @@ import path from 'path';
 import {Pool} from 'pg';
 
 import{UserRouter} from './routers/user-router';
+import { ReimbRouter } from './routers/reimb-routers';
 
 dotenv.config();
 
@@ -28,6 +29,8 @@ app.use(morgan('combined', { stream: logStream }));
 
 app.use('/', express.json());
 app.use('/users', UserRouter);
+app.use('/reimb', ReimbRouter);
+
 
 app.get('/', (req, res) => res.send('HELLO WEEB WORLD'))
 
