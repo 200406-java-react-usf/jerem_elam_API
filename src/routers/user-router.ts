@@ -3,6 +3,7 @@ import express from 'express';
 import AppConfig from '../config/app';
 import {isEmptyObject} from '../util/validators';
 import { ParsedUrlQuery} from 'querystring';
+import { adminGuard } from '../middleware/auth-middleware'
 
 export const UserRouter = express.Router();
 
@@ -10,7 +11,7 @@ const UserService = AppConfig.userService;
 
 
 
-UserRouter.get('', async (req, resp)=>{
+UserRouter.get('', adminGuard, async (req, resp)=>{
 	try{
 		
 		let reqURL =url.parse(req.url,true);

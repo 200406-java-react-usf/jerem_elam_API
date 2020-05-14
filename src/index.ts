@@ -5,8 +5,11 @@ import morgan from 'morgan';
 import path from 'path';
 import {Pool} from 'pg';
 
-import{UserRouter} from './routers/user-router';
+import{ UserRouter } from './routers/user-router';
 import { ReimbRouter } from './routers/reimb-routers';
+import { AuthRouter } from './routers/auth-routers'
+import { sessionMiddleware } from './middleware/session-middleware';
+import { corsFilter } from './middleware/cors-filter';
 
 dotenv.config();
 
@@ -26,10 +29,12 @@ const logStream = fs.createWriteStream(path.join(__dirname, 'logs/access.log'), 
 app.use(morgan('combined', { stream: logStream }));
 
 
-
+app.use(sessionMiddleware);
+app.use(corsFilter);
 app.use('/', express.json());
 app.use('/users', UserRouter);
 app.use('/reimb', ReimbRouter);
+app.use('/auth', AuthRouter);
 
 
 app.get('/', (req, res) => res.send('HELLO WEEB WORLD'))
