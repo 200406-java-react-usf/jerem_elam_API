@@ -51,57 +51,29 @@ export class ReimbService{
 		return reimb;
 	}
 
+	//need to add second to make sure the string given is a type in database. for now mvp
 	async getAllReimbByType(type:string): Promise<Reimbursements[]>{
 		if(!isValidStrings(type)){
 			throw new BadRequestError();
 		}
-		let reimbType = await this.reimbRepo.getAllByType(type);
-		if(!reimbType){
-			throw new BadRequestError("the type of Reimbursement is invalid")
-		}
-
+		
 		let reimb = await this.reimbRepo.getAllByType(type);
 		if(reimb.length === 0){
-			throw new ResourceNotFoundError();
+			throw new ResourceNotFoundError('Type provided is invalid');
 		}
 		return reimb;
 	}
 
+	//need to add second check to make sure string given is a status in database. for now mvp
 	async getAllReimbByStatus(status: string): Promise<Reimbursements[]>{
 		if(!isValidStrings(status)){
 			throw new BadRequestError();
 		}
-		let reimbStatus = await this.reimbRepo.getAllByStatus(status);
-		if(!reimbStatus){
-			throw new BadRequestError('the status of Reimbursement given is invalid');
-		}
-
 		let reimb = await this.reimbRepo.getAllByStatus(status);
 		if(reimb.length === 0){
-			throw new ResourceNotFoundError();
+			throw new ResourceNotFoundError('Status provided is invalid');
 		}
 		return reimb;
 	}
 
-	async isValidType(type:string): Promise<boolean>{
-		try{
-			await this.getReimbByUniqueKey({'reimb_status': type});
-		}catch(e){
-			console.log('type is not in database');
-			return false;
-		}
-		console.log('type is in database');
-		return true;
-	}
-
-	async isValidStatus(status: string): Promise<boolean>{
-		try{
-			await this.getReimbByUniqueKey({'reimb_status': status});
-		}catch(e){
-			console.log('status is not in database');
-			return false;
-		}
-		console.log('status is in database');
-		return true;
-	}
 }
