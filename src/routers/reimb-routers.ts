@@ -54,3 +54,31 @@ ReimbRouter.get('/:id', async(req, resp)=>{
 	}
 });
 
+ReimbRouter.delete('', async(req, resp) =>{
+	console.log(req.body);
+	
+	try{
+		let payload = await ReimbService.deleteReimbById(req.body);
+		return resp.status(202).json(payload);
+	}catch(e){
+		return resp.status(e.statusCode).json(e);
+	}
+});
+
+ReimbRouter.post('',async (req, resp) =>{	
+	try{
+		let newUser = await ReimbService.addNewReimb(req.body);
+		return resp.status(201).json(newUser);
+	} catch(e){
+		return resp.status(e.statusCode).json(e);
+	}
+});
+ReimbRouter.put('', async(req, resp) =>{
+	try{
+		let payload = await ReimbService.updateReimb(req.body);
+		return resp.status(201).json(payload);
+	}catch (e){
+		return resp.status(e.statusCode).json(e);
+	}
+});
+

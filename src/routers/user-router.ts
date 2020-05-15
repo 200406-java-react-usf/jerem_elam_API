@@ -3,6 +3,7 @@ import express from 'express';
 import AppConfig from '../config/app';
 import {isEmptyObject} from '../util/validators';
 import { ParsedUrlQuery} from 'querystring';
+import { adminGuard } from '../middleware/auth-middleware'
 
 export const UserRouter = express.Router();
 
@@ -10,7 +11,7 @@ const UserService = AppConfig.userService;
 
 
 
-UserRouter.get('', async (req, resp)=>{
+UserRouter.get('', adminGuard, async (req, resp)=>{
 	try{
 		
 		let reqURL =url.parse(req.url,true);
@@ -28,9 +29,6 @@ UserRouter.get('', async (req, resp)=>{
 
 UserRouter.get('/role/:role', async(req, resp) =>{
 	const role = req.params.role;
-
-	console.log(role + ' 1');
-	
 	try{
 		let payload = await UserService.getAllUsersByRole(role);
 		return resp.status(200).json(payload);
@@ -70,12 +68,8 @@ UserRouter.delete('', async(req, resp) =>{
 });
 
 UserRouter.put('', async(req, resp) =>{
-	console.log('1 repo');
 	try{
-		console.log('2 repo');
 		let payload = await UserService.updateUser(req.body);
-		console.log('3 repo');
-
 		return resp.status(201).json(payload);
 	}catch (e){
 		return resp.status(e.statusCode).json(e);

@@ -50,8 +50,6 @@ export class UserRepository{
 		}
 	}
 	async save(newUser: Users):Promise<Users>{
-		console.log(Users);
-		
 		let client: PoolClient; 
 		try{
 			client = await connectionPool.connect();
@@ -85,8 +83,6 @@ export class UserRepository{
 
 	async update(updatedUser: Users): Promise<boolean>{
 		let client: PoolClient;
-	
-
 		try{
 			client = await connectionPool.connect();
 			let user_role_id = (await client.query('select role_id from ers_user_roles where role_name = $1', [updatedUser.role_name])).rows[0].role_id;
@@ -116,5 +112,21 @@ export class UserRepository{
 			client && client.release();
 		}
 	}
+	async getUserByCreds(username: string, password: string): Promise<Users> {
+		let client: PoolClient;
+		try {
+            let client: PoolClient;
+            client = await connectionPool.connect();
+            let sql = `select * from full_user_info where username = $1 and password = $2`;
+            let rs = await client.query(sql, [username, password]);
+            return rs.rows[0];
+        } catch (e) {
+            console.log(e);
+            throw new InternalServerError('Error during getUserByCreds method in UserRepo');
+        }finally{
+			client && client.release();
+		}
+    }	
+	
 
 }

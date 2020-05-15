@@ -1,12 +1,28 @@
-import {Request, Response} from 'express';
+import { Request, Response } from "express";
 import { AuthenticationError, AuthorizationError } from '../errors/errors';
 
-export const adminGuard = (req: Request, resp: Response, next)=>{
-	if(!req.session.principal){
-		resp.sendStatus(401).send( new AuthenticationError('No session found! Please login'));
-	}else if(req.session.principal.role === 'Admin'){
-		next();
-	}else{
-		resp.sendStatus(403).send(new AuthenticationError());
-	}
-};
+const adminGuard = (req: Request, resp: Response, next) => {
+
+    if (!req.session.principal) {
+        resp.status(401).json(new AuthenticationError('No session found, please login.'));
+    } else if (req.session.principal.role === 'admin') {
+        next();
+    } else {
+        resp.status(403).json(new AuthorizationError());
+    }
+}
+
+const financeGuard = (req: Request, resp: Response, next) => {
+    if (!req.session.principal) {
+        resp.status(401).json(new AuthenticationError('No session found, please login.'));
+    } else if (req.session.principal.role === 'finance') {
+        next();
+    } else {
+        resp.status(403).json(new AuthorizationError());
+    }
+}
+
+export {
+    adminGuard,
+    financeGuard
+}

@@ -51,6 +51,46 @@ export class ReimbService{
 		return reimb;
 	}
 
+	async deleteReimbById(id: object): Promise<boolean>{
+		let keys = Object.keys(id);
+		if(!keys.every(key=> isPropertyOf(key, Reimbursements))){
+			throw new BadRequestError('Invalid key given');
+		}
+		let key = keys[0];
+		let value = +id[key];
+		if(!isValidId(value)){
+			throw new BadRequestError();
+		}
+		await this.reimbRepo.deleteById(value);
+		return true;
+	}
+
+	async addNewReimb(newReimb: Reimbursements): Promise<Reimbursements>{
+		if(!isValidObject(newReimb, 'reimb_id', 'resolved', 'resolver_id', 'submitted', 'reimb_status')){
+			throw new BadRequestError('Invalid Property values found in provided reimbursement');
+		}
+		newReimb.resolved = null;
+		newReimb.resolver_id = null;
+		newReimb.submitted = new Date();
+		newReimb.reimb_status = 'pending';
+		const newReimbursement = await this.reimbRepo.saveReimb(newReimb);
+		return newReimbursement;
+	}
+
+	async updateReimb(updateReimb: Reimbursements): Promise<boolean>{
+		if(!isValidObject(updateReimb, 'resolved','submitted', 'amount', 'submitted', 'resolved', 'description', 'author_id', 'reimb_type')){
+			throw new BadRequestError('Invalid Property values found in provided reimbursement update');
+		}
+		let keys = Object.keys(updateReimb);
+		if(!keys.every(key=> isPropertyOf(key, Reimbursements))){
+			throw new BadRequestError('Invalid key given');
+		}
+
+		console.log(updateReimb.reimb_id, updateReimb.reimb_status, updateReimb.resolver_id);
+		
+		return await this.reimbRepo.updateReimb(updateReimb.reimb_id, updateReimb.reimb_status, updateReimb.resolver_id);
+	}
+
 	//need to add second to make sure the string given is a type in database. for now mvp
 	async getAllReimbByType(type:string): Promise<Reimbursements[]>{
 		if(!isValidStrings(type)){
@@ -75,5 +115,4 @@ export class ReimbService{
 		}
 		return reimb;
 	}
-
 }
