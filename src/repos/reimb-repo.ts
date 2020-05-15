@@ -1,8 +1,8 @@
 import {Reimbursements} from '../models/reimb';
-import {InternalServerError}from '../errors/errors';
+import {InternalServerError, BadRequestError}from '../errors/errors';
 import {PoolClient} from 'pg';
 import {connectionPool} from '..';
-import { mapUserResultSet } from '../util/result-set-mapper';
+import { isPropertyOf, isValidObject } from '../util/validators';
 
 export class ReimbRepository{
 	baseQuery = `select * from full_reimbursements_info`;
@@ -77,9 +77,11 @@ export class ReimbRepository{
 		let client: PoolClient;
 		try{
 			client = await connectionPool.connect();
-			let status_id = (await client.query('select reimb_status_id from ers_reimbursement_statuses where reimb_status = $1'[updateStatus])).rows[0].reimb_status_id;
-			let currentTime = (await client.query('SELECT CURRENT_TIMESTAMP'));
+			let status_id = (await client.query('select reimb_status_id from ers_reimbursement_statuses where reimb_status = $1',[updateStatus])).rows[0].reimb_status_id;
+
+			let currentTime = new Date()
 			let sql = 'update ers_reimbursements set resolved = $2, resolver_id = $3, reimb_status_id = $4 where reimb_id = $1';
+			console.log(reimb_id, currentTime, resolver_id, status_id);
 			await client.query(sql,[reimb_id, currentTime, resolver_id, status_id]);
 			return true;
 		}catch(e){
@@ -88,6 +90,26 @@ export class ReimbRepository{
 			client && client.release();
 		}
 	}
+
+	async saveReimb(reimb: Reimbursements): Promise<Reimbursements>{
+		let client: PoolClient;
+		try{
+			client = await connectionPool.connect();
+			let statusPending = 2;
+			let type_id = (await client.query('select reimb_type_id from ers_reimbursement_types where reimb_type = $1',[reimb.reimb_type])).rows[0].reimb_type_id
+			let sql = `insert into ers_reimbursements  (amount , submitted ,resolved ,description ,author_id , resolver_id , reimb_status_id, reimb_type_id)
+			values($1, $2, $3, $4,$5,$6,$7,$8) returning reimb_id;`;
+			let rs = await client.query(sql, [reimb.amount,reimb.submitted, reimb.resolved, reimb.description, reimb.author_id, reimb.resolver_id, statusPending , type_id]);
+			reimb.reimb_id = rs.rows[0].reimb_id;
+			return reimb;
+		}catch(e){
+			throw new InternalServerError();
+		}finally{
+			client && client.release();
+		}
+	}
+
+
 	async deleteById(id:number): Promise<boolean>{
 		let client: PoolClient;
 		try{

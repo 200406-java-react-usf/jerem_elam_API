@@ -50,8 +50,6 @@ export class UserRepository{
 		}
 	}
 	async save(newUser: Users):Promise<Users>{
-		console.log(Users);
-		
 		let client: PoolClient; 
 		try{
 			client = await connectionPool.connect();

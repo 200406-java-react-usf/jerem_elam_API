@@ -23,10 +23,15 @@
     },
     "homepage": "https://github.com/200406-java-react-usf/jeremy_elam_p1_API#readme",
     "dependencies": {
+        "@types/react-redux": "^7.1.8",
+        "@types/redux-thunk": "^2.1.0",
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "express-session": "^1.17.1",
-        "pg": "^8.1.0"
+        "pg": "^8.1.0",
+        "react-redux": "^7.2.0",
+        "redux": "^4.0.5",
+        "redux-thunk": "^2.3.0"
     },
     "devDependencies": {
         "@types/express": "^4.17.6",

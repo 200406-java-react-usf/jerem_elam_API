@@ -69,10 +69,8 @@ export class UserService{
 		return this.removePassword(user);
 	}
 	async addNewUser(newUser:Users): Promise<Users>{
-		console.log(Users);
-		
 		if(!isValidObject(newUser,'ers_user_id')){
-			throw new BadRequestError('Invalid property values fround in provided user.');
+			throw new BadRequestError('Invalid property values found in provided user.');
 		}
 		let emailAvailable = await this.isEmailAvailable(newUser.email);
 		let usernameAvailable = await this.isUsernameAvailable(newUser.username);

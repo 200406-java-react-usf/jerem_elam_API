@@ -12,7 +12,6 @@ AuthRouter.get('', (req, resp) => {
 });
 
 AuthRouter.post('', async (req, resp) => {
-
     try {
         const { username, password } = req.body;
         let authUser = await userService.authUser(username, password);
