@@ -16,8 +16,6 @@ export class UserRepository{
 			let rs = await client.query(sql);
 			return rs.rows;
 		}catch(e){
-			console.log(e);
-			
 			throw new InternalServerError();
 		}finally{
 			client && client.release();
@@ -33,6 +31,8 @@ export class UserRepository{
 			return rs.rows;
 		}catch(e){
 			throw new InternalServerError();
+		} finally{ 
+			client && client.release();
 		}
 	}
 
@@ -49,7 +49,7 @@ export class UserRepository{
 			client && client.release();
 		}
 	}
-	async save(newUser: Users):Promise<Users>{
+	async save(newUser: Users):Promise<Users>{		
 		let client: PoolClient; 
 		try{
 			client = await connectionPool.connect();
@@ -60,7 +60,6 @@ export class UserRepository{
 			newUser.ers_user_id = rs.rows[0].ers_users_id;
 			return newUser;
 		}catch(e){
-			console.log(e);
 			throw new InternalServerError();
 		} finally{
 			client && client.release();
@@ -121,7 +120,6 @@ export class UserRepository{
             let rs = await client.query(sql, [username, password]);
             return rs.rows[0];
         } catch (e) {
-            console.log(e);
             throw new InternalServerError('Error during getUserByCreds method in UserRepo');
         }finally{
 			client && client.release();

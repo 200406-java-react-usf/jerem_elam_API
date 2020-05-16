@@ -48,6 +48,7 @@ UserRouter.get('/:id', async(req, resp) =>{
 });
 
 UserRouter.post('',async (req, resp) =>{
+	
 	try{
 		let newUser = await UserService.addNewUser(req.body);
 		return resp.status(201).json(newUser);
@@ -57,8 +58,6 @@ UserRouter.post('',async (req, resp) =>{
 });
 
 UserRouter.delete('', async(req, resp) =>{
-	console.log(req.body);
-	
 	try{
 		let payload = await UserService.deleteUserById(req.body);
 		return resp.status(202).json(payload);

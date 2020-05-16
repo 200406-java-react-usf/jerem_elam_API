@@ -78,7 +78,6 @@ export class ReimbRepository{
 		try{
 			client = await connectionPool.connect();
 			let status_id = (await client.query('select reimb_status_id from ers_reimbursement_statuses where reimb_status = $1',[updateStatus])).rows[0].reimb_status_id;
-
 			let currentTime = new Date()
 			let sql = 'update ers_reimbursements set resolved = $2, resolver_id = $3, reimb_status_id = $4 where reimb_id = $1';
 			console.log(reimb_id, currentTime, resolver_id, status_id);

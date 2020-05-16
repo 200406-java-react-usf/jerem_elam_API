@@ -55,8 +55,6 @@ ReimbRouter.get('/:id', async(req, resp)=>{
 });
 
 ReimbRouter.delete('', async(req, resp) =>{
-	console.log(req.body);
-	
 	try{
 		let payload = await ReimbService.deleteReimbById(req.body);
 		return resp.status(202).json(payload);
