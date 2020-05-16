@@ -58,6 +58,8 @@ export class ReimbRepository{
 			return rs.rows
 		}catch(e){
 			throw new InternalServerError();
+		} finally {
+			client && client.release();
 		}
 	}
 
@@ -70,6 +72,8 @@ export class ReimbRepository{
 			return rs.rows
 		}catch(e){
 			throw new InternalServerError();
+		} finally{
+			client && client.release();
 		}
 	}
 
