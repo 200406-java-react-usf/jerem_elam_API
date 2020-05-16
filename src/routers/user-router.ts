@@ -11,7 +11,7 @@ const UserService = AppConfig.userService;
 
 
 
-UserRouter.get('', adminGuard, async (req, resp)=>{
+UserRouter.get('', async (req, resp)=>{
 	try{
 		
 		let reqURL =url.parse(req.url,true);
