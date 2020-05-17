@@ -49,7 +49,9 @@ export class UserRepository{
 			client && client.release();
 		}
 	}
-	async save(newUser: Users):Promise<Users>{		
+	async save(newUser: Users):Promise<Users>{	
+		console.log(newUser);
+			
 		let client: PoolClient; 
 		try{
 			client = await connectionPool.connect();

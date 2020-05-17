@@ -66,6 +66,7 @@ UserRouter.delete('', async(req, resp) =>{
 });
 
 UserRouter.put('', async(req, resp) =>{
+	
 	try{
 		let payload = await UserService.updateUser(req.body);
 		return resp.status(201).json(payload);
