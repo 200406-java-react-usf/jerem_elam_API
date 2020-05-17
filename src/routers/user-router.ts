@@ -48,7 +48,6 @@ UserRouter.get('/:id', async(req, resp) =>{
 });
 
 UserRouter.post('',async (req, resp) =>{
-	
 	try{
 		let newUser = await UserService.addNewUser(req.body);
 		return resp.status(201).json(newUser);
