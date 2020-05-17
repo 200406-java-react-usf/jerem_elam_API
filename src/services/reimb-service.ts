@@ -86,7 +86,10 @@ export class ReimbService{
 			throw new BadRequestError('Invalid key given');
 		}
 
-		console.log(updateReimb.reimb_id, updateReimb.reimb_status, updateReimb.resolver_id);
+		let check = await this.getReimbById(updateReimb.reimb_id)
+		if(check.reimb_status != 'pending'){
+			throw new BadRequestError('Only pending Reimbursements can be updated')
+		}
 		
 		return await this.reimbRepo.updateReimb(updateReimb.reimb_id, updateReimb.reimb_status, updateReimb.resolver_id);
 	}
