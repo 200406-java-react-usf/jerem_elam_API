@@ -1,12 +1,12 @@
-import {Users} from '../models/users';
 import {UserRepository} from '../repos/user-repo';
 import validators, {isValidId, isValidStrings, isValidObject, isPropertyOf, isEmptyObject} from '../util/validators';
+import {Users} from '../models/users';
 import { 
 	BadRequestError,
 	ResourceNotFoundError, 
 	ResourcePersistenceError, 
 } from '../errors/errors';
-
+	
 export class UserService{
 	constructor(private userRepo: UserRepository){
 		this.userRepo = userRepo;
@@ -81,7 +81,7 @@ export class UserService{
 		if(!emailAvailable){
 			throw new ResourcePersistenceError('The provided email is already in use.');
 		}
-		newUser.role_name = 'employee';
+		
 		const persistedUser = await this.userRepo.save(newUser);
 		return this.removePassword(persistedUser);
 	}
@@ -101,17 +101,22 @@ export class UserService{
 	}
 
 	async updateUser(updateUser: Users):Promise<boolean>{
+		updateUser.ers_user_id = +updateUser.ers_user_id;
+		
 		try{
 			if(!isValidObject(updateUser)){
 				throw new BadRequestError();
 			}
 			let usernameAvailable = await this.isUsernameAvailable(updateUser.username);
 			let usernameDatabase = await this.getUserById(updateUser.ers_user_id);
+		
 			
 			let databaseUsername = await this.getUserByUniqueKey({'username':updateUser.username});
 			if(usernameDatabase.username == databaseUsername.username){
 				usernameAvailable = true;
 			}
+	
+
 			if(!usernameAvailable){
 				throw new ResourceNotFoundError('The username passed through is already in use')
 			}

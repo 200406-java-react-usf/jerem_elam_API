@@ -114,7 +114,6 @@ export class UserRepository{
 	async getUserByCreds(username: string, password: string): Promise<Users> {
 		let client: PoolClient;
 		try {
-            let client: PoolClient;
             client = await connectionPool.connect();
             let sql = `select * from full_user_info where username = $1 and password = $2`;
             let rs = await client.query(sql, [username, password]);
