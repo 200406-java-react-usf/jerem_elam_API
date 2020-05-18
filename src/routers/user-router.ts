@@ -11,7 +11,7 @@ const UserService = AppConfig.userService;
 
 
 
-UserRouter.get('', async (req, resp)=>{
+UserRouter.get('',adminGuard, async (req, resp)=>{
 	try{
 		
 		let reqURL =url.parse(req.url,true);
@@ -65,8 +65,7 @@ UserRouter.delete('', async(req, resp) =>{
 	}
 });
 
-UserRouter.put('', async(req, resp) =>{
-	
+UserRouter.put('', async(req, resp) =>{	
 	try{
 		let payload = await UserService.updateUser(req.body);
 		return resp.status(201).json(payload);
