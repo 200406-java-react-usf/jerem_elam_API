@@ -102,24 +102,21 @@ export class UserService{
 
 	async updateUser(updateUser: Users):Promise<boolean>{
 		updateUser.ers_user_id = +updateUser.ers_user_id;
-		
 		try{
 			if(!isValidObject(updateUser)){
 				throw new BadRequestError();
 			}
 			let usernameAvailable = await this.isUsernameAvailable(updateUser.username);
 			let usernameDatabase = await this.getUserById(updateUser.ers_user_id);
-		
-			
 			let databaseUsername = await this.getUserByUniqueKey({'username':updateUser.username});
 			if(usernameDatabase.username == databaseUsername.username){
 				usernameAvailable = true;
 			}
-	
-
+			
 			if(!usernameAvailable){
 				throw new ResourceNotFoundError('The username passed through is already in use')
 			}
+			
 			let emailAvailable = await this.isEmailAvailable(updateUser.email);
 			let emailDatabase = await this.getUserById(updateUser.ers_user_id);
 			let databaseEmail = await this.getUserByUniqueKey({'email': updateUser.email});
@@ -130,6 +127,7 @@ export class UserService{
 			if(!emailAvailable){
 				throw new ResourcePersistenceError('The email address passed through is already in use');
 			}
+			
 			return await this.userRepo.update(updateUser);
 		}catch(e){
 			throw e;
