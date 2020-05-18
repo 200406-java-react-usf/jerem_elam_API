@@ -83,6 +83,7 @@ export class UserRepository{
 	}
 
 	async update(updatedUser: Users): Promise<boolean>{
+		updatedUser.ers_user_id = +updatedUser.ers_user_id;
 		let client: PoolClient;
 		try{
 			client = await connectionPool.connect();
