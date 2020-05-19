@@ -29,6 +29,18 @@ export class ReimbService{
 		}
 		return reimb;
 	}
+	async getAllReimbById(id: number): Promise<Reimbursements[]>{
+		if(!isValidId(id)){
+			throw new BadRequestError();
+		}
+		let reimbs = await this.reimbRepo.getAllById(id);
+
+		if(reimbs.length === 0){
+			throw new ResourceNotFoundError();
+		}
+		return reimbs
+
+	}
 	async getReimbByUniqueKey(queryObj: any): Promise<Reimbursements>{
 		
 		let queryKeys = Object.keys(queryObj);
@@ -78,6 +90,7 @@ export class ReimbService{
 	}
 
 	async updateReimb(updateReimb: Reimbursements): Promise<boolean>{
+		updateReimb.reimb_id = +updateReimb.reimb_id;
 		if(!isValidObject(updateReimb, 'resolved','submitted', 'amount', 'submitted', 'resolved', 'description', 'author_id', 'reimb_type')){
 			throw new BadRequestError('Invalid Property values found in provided reimbursement update');
 		}
@@ -109,6 +122,8 @@ export class ReimbService{
 
 	//need to add second check to make sure string given is a status in database. for now mvp
 	async getAllReimbByStatus(status: string): Promise<Reimbursements[]>{
+		console.log(status);
+		
 		if(!isValidStrings(status)){
 			throw new BadRequestError();
 		}
