@@ -49,9 +49,7 @@ export class UserRepository{
 			client && client.release();
 		}
 	}
-	async save(newUser: Users):Promise<Users>{	
-		console.log(newUser);
-			
+	async save(newUser: Users):Promise<Users>{		
 		let client: PoolClient; 
 		try{
 			client = await connectionPool.connect();
@@ -75,7 +73,7 @@ export class UserRepository{
 			let sql = `${this.baseQuery} where full_user_info.${key} = $1`;
 			let rs = await client.query(sql, [val]);
 			return mapUserResultSet(rs.rows[0]);
-		}catch(e){
+		}catch(e){	
 			throw new InternalServerError();
 		}finally{
 			client && client.release();
