@@ -59,15 +59,19 @@ export class UserService{
 		if(key === 'ers_user_id'){
 			return await this.getUserById(+val);
 		}
+
 		if(!isValidStrings(val)){
 			throw new BadRequestError('test 2');
 		}
+
 		let user = await this.userRepo.getUserByUniqueKey(key, val);
+
 		if(isEmptyObject(user)){
 			throw new ResourceNotFoundError('test 1');
 		}
 		return this.removePassword(user);
 	}
+
 	async addNewUser(newUser:Users): Promise<Users>{
 		if(!isValidObject(newUser,'ers_user_id')){
 			throw new BadRequestError('Invalid property values found in provided user.');
@@ -106,23 +110,33 @@ export class UserService{
 			if(!isValidObject(updateUser)){
 				throw new BadRequestError();
 			}
+
+			let userToUpdate = await this.getUserById(updateUser.ers_user_id);
+			console.log(userToUpdate);
+			
+			if(!userToUpdate){
+				throw new ResourceNotFoundError('No user found to update');
+			}
+
 			let usernameAvailable = await this.isUsernameAvailable(updateUser.username);
-			let usernameDatabase = await this.getUserById(updateUser.ers_user_id);
-			let databaseUsername = await this.getUserByUniqueKey({'username':updateUser.username});
-			if(usernameDatabase.username == databaseUsername.username){
+			
+			if(userToUpdate.username === updateUser.username){
 				usernameAvailable = true;
 			}
+			console.log(usernameAvailable)
 			
 			if(!usernameAvailable){
 				throw new ResourceNotFoundError('The username passed through is already in use')
 			}
-			
+
 			let emailAvailable = await this.isEmailAvailable(updateUser.email);
-			let emailDatabase = await this.getUserById(updateUser.ers_user_id);
-			let databaseEmail = await this.getUserByUniqueKey({'email': updateUser.email});
-			if(emailDatabase.email == databaseEmail.email){
+			
+			if(userToUpdate.email === updateUser.email){
 				emailAvailable = true;
 			}
+
+			console.log(emailAvailable);
+			
 			
 			if(!emailAvailable){
 				throw new ResourcePersistenceError('The email address passed through is already in use');
@@ -147,16 +161,19 @@ export class UserService{
 	async isUsernameAvailable(un: string): Promise<boolean>{
 		try{
 		await this.getUserByUniqueKey({'username':un});
+		console.log(await this.getUserByUniqueKey({'username':un})+" and another one");
+		
 		}catch(e){
 			console.log('username is available');
 			return true
 		}
-		console.log('email is available');
+		console.log('username not is available');
 		return false;
 	}
 	async isEmailAvailable(email: string): Promise<boolean>{
 		try{
 		await this.getUserByUniqueKey({'email':email});
+		console.log(await this.getUserByUniqueKey({'email':email})+ "this is the test")
 		}catch(e){
 			console.log('email is available');
 			return true
