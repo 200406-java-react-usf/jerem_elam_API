@@ -35,6 +35,21 @@ export class ReimbRepository{
 		}
 	}
 
+	async getAllById(id: number): Promise<Reimbursements[]>{
+		let client: PoolClient;
+		try{
+			client = await connectionPool.connect();
+			let sql = `${this.baseQuery} where author_id = $1`
+			let rs = await client.query(sql, [id])
+			
+			return rs.rows;
+		}catch(e){
+			throw new InternalServerError();
+		} finally {
+			client && client.release();
+		}
+	}
+
 	async getReimbByUniqueKey(key: string, val: string): Promise<Reimbursements>{
 		let client: PoolClient
 		try{
