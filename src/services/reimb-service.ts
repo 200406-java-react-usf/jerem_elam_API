@@ -89,7 +89,7 @@ export class ReimbService{
 		return newReimbursement;
 	}
 
-	async updateReimb(updateReimb: Reimbursements): Promise<boolean>{
+	async updateStatus(updateReimb: Reimbursements): Promise<boolean>{
 		updateReimb.reimb_id = +updateReimb.reimb_id;
 		if(!isValidObject(updateReimb, 'resolved','submitted', 'amount', 'submitted', 'resolved', 'description', 'author_id', 'reimb_type')){
 			throw new BadRequestError('Invalid Property values found in provided reimbursement update');
@@ -104,7 +104,25 @@ export class ReimbService{
 			throw new BadRequestError('Only pending Reimbursements can be updated')
 		}
 		
-		return await this.reimbRepo.updateReimb(updateReimb.reimb_id, updateReimb.reimb_status, updateReimb.resolver_id);
+		return await this.reimbRepo.updateStatus(updateReimb.reimb_id, updateReimb.reimb_status, updateReimb.resolver_id);
+	}
+
+	async updateReimb(updateReimb: Reimbursements): Promise<boolean>{
+		updateReimb.reimb_id = +updateReimb.reimb_id;
+		if(!isValidObject(updateReimb, 'resolved','submitted', 'author_id','reimb_status' ,'resolver_id')){
+			throw new BadRequestError('Invalid Property values found in provided reimbursement update');
+		}
+		let keys = Object.keys(updateReimb);
+		if(!keys.every(key=> isPropertyOf(key, Reimbursements))){
+			throw new BadRequestError('Invalid key given');
+		}
+
+		let check = await this.getReimbById(updateReimb.reimb_id)
+		if(check.reimb_status != 'pending'){
+			throw new BadRequestError('Only pending Reimbursements can be updated')
+		}
+		
+		return await this.reimbRepo.updateReimb(updateReimb.reimb_id,updateReimb.amount,updateReimb.description,updateReimb.reimb_type);
 	}
 
 	//need to add second to make sure the string given is a type in database. for now mvp
@@ -122,8 +140,6 @@ export class ReimbService{
 
 	//need to add second check to make sure string given is a status in database. for now mvp
 	async getAllReimbByStatus(status: string): Promise<Reimbursements[]>{
-		console.log(status);
-		
 		if(!isValidStrings(status)){
 			throw new BadRequestError();
 		}
