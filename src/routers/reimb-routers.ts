@@ -85,8 +85,15 @@ ReimbRouter.post('',async (req, resp) =>{
 	}
 });
 ReimbRouter.put('', async(req, resp) =>{
-	console.log(req.body);
-	
+	try{
+		let payload = await ReimbService.updateStatus(req.body);
+		return resp.status(201).json(payload);
+	}catch (e){
+		return resp.status(e.statusCode).json(e);
+	}
+});
+
+ReimbRouter.put('/update', async(req, resp) =>{
 	try{
 		let payload = await ReimbService.updateReimb(req.body);
 		return resp.status(201).json(payload);

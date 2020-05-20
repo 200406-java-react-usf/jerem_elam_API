@@ -92,20 +92,36 @@ export class ReimbRepository{
 		}
 	}
 
-	async updateReimb(reimb_id: number, updateStatus: string, resolver_id: number):  Promise<boolean>{
+	async updateStatus(reimb_id: number, updateStatus: string, resolver_id: number):  Promise<boolean>{
 		let client: PoolClient;
 		try{
 			client = await connectionPool.connect();
 			let status_id = (await client.query('select reimb_status_id from ers_reimbursement_statuses where reimb_status = $1',[updateStatus])).rows[0].reimb_status_id;
 			let currentTime = new Date()
 			let sql = 'update ers_reimbursements set resolved = $2, resolver_id = $3, reimb_status_id = $4 where reimb_id = $1';
-			console.log(reimb_id, currentTime, resolver_id, status_id);
 			await client.query(sql,[reimb_id, currentTime, resolver_id, status_id]);
 			return true;
 		}catch(e){
 			throw new InternalServerError();
 		}finally{
 			client && client.release();
+		}
+	}
+
+	async updateReimb(reimb_id: number,amount: number, description: string, reimb_type: string): Promise<boolean>{
+		let client: PoolClient;
+		try{
+			client = await connectionPool.connect();
+			let type_id = (await client.query('select reimb_type_id from ers_reimbursement_types where reimb_type = $1',[reimb_type])).rows[0].reimb_type_id
+			let sql = 'update ers_reimbursements set amount = $2, description = $3, reimb_type_id = $4 where reimb_id = $1';
+			await client.query(sql,[reimb_id, amount, description, type_id]);
+			return true;
+		}catch(e){
+			console.log(e);
+			
+			throw new InternalServerError();
+		}finally{
+			client && client.release()
 		}
 	}
 
