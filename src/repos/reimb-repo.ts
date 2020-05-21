@@ -108,7 +108,7 @@ export class ReimbRepository{
 		}
 	}
 
-	async updateReimb(reimb_id: number,amount: number, description: string, reimb_type: string): Promise<boolean>{
+	async update(reimb_id: number,amount: number, description: string, reimb_type: string): Promise<boolean>{
 		let client: PoolClient;
 		try{
 			client = await connectionPool.connect();
@@ -117,8 +117,6 @@ export class ReimbRepository{
 			await client.query(sql,[reimb_id, amount, description, type_id]);
 			return true;
 		}catch(e){
-			console.log(e);
-			
 			throw new InternalServerError();
 		}finally{
 			client && client.release()
