@@ -19,23 +19,23 @@ export class UserService{
 		}
 		return users.map(this.removePassword); 
 	}
-	async getAllUsersByRole(role: string): Promise<Users[]>{
+	// async getAllUsersByRole(role: string): Promise<Users[]>{
 		
-		if(!isValidStrings(role)){
-			throw new BadRequestError('the value you provided was not a string. Please provided a proper string');
-		}
-		let userRoles = await this.isValidRole(role);
-		if(!userRoles){
-			throw new BadRequestError('the role you provided is invalid');
-		}
+	// 	if(!isValidStrings(role)){
+	// 		throw new BadRequestError('the value you provided was not a string. Please provided a proper string');
+	// 	}
+	// 	let userRoles = await this.isValidRole(role);
+	// 	if(!userRoles){
+	// 		throw new BadRequestError('the role you provided is invalid');
+	// 	}
 
-		let users = await this.userRepo.getAllByRole(role);
+	// 	let users = await this.userRepo.getAllByRole(role);
 		
-		if(users.length === 0){
-			throw new ResourceNotFoundError();
-		}
-		return users;
-	}
+	// 	if(users.length === 0){
+	// 		throw new ResourceNotFoundError();
+	// 	}
+	// 	return users;
+	// }
 	async getUserById(id:number): Promise<Users>{
 		if(!isValidId(id)){
 			throw new BadRequestError();
@@ -112,7 +112,6 @@ export class UserService{
 			}
 
 			let userToUpdate = await this.getUserById(updateUser.ers_user_id);
-			console.log(userToUpdate);
 			
 			if(!userToUpdate){
 				throw new ResourceNotFoundError('No user found to update');
@@ -123,7 +122,6 @@ export class UserService{
 			if(userToUpdate.username === updateUser.username){
 				usernameAvailable = true;
 			}
-			console.log(usernameAvailable)
 			
 			if(!usernameAvailable){
 				throw new ResourceNotFoundError('The username passed through is already in use')
@@ -134,9 +132,6 @@ export class UserService{
 			if(userToUpdate.email === updateUser.email){
 				emailAvailable = true;
 			}
-
-			console.log(emailAvailable);
-			
 			
 			if(!emailAvailable){
 				throw new ResourcePersistenceError('The email address passed through is already in use');
@@ -152,33 +147,24 @@ export class UserService{
 		try{
 			await this.getUserByUniqueKey({'role_name': role});
 		}catch(e){
-			console.log('role is not in database');
 			return false;
 		}
-		console.log('role is in database');
 		return true;
 	}
 	async isUsernameAvailable(un: string): Promise<boolean>{
 		try{
 		await this.getUserByUniqueKey({'username':un});
-		console.log(await this.getUserByUniqueKey({'username':un})+" and another one");
-		
 		}catch(e){
-			console.log('username is available');
 			return true
 		}
-		console.log('username not is available');
 		return false;
 	}
 	async isEmailAvailable(email: string): Promise<boolean>{
 		try{
 		await this.getUserByUniqueKey({'email':email});
-		console.log(await this.getUserByUniqueKey({'email':email})+ "this is the test")
 		}catch(e){
-			console.log('email is available');
 			return true
 		}
-		console.log('email is not available');
 		return false;
 	}
 
@@ -188,9 +174,7 @@ export class UserService{
         if(!isValidStrings(username) || !isValidStrings(password)){
             throw new BadRequestError('Given username and/or password are not valid strings.');
         }
-
         authUser = await this.userRepo.getUserByCreds(username, password);
-
         return (authUser);
     }
 		
