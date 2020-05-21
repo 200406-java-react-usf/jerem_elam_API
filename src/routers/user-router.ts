@@ -27,15 +27,15 @@ UserRouter.get('',adminGuard, async (req, resp)=>{
 	}
 });
 
-UserRouter.get('/role/:role', async(req, resp) =>{
-	const role = req.params.role;
-	try{
-		let payload = await UserService.getAllUsersByRole(role);
-		return resp.status(200).json(payload);
-	}catch(e){
-		return resp.status(e.statusCode).json(e);
-	}
-})
+// UserRouter.get('/role/:role', async(req, resp) =>{
+// 	const role = req.params.role;
+// 	try{
+// 		let payload = await UserService.getAllUsersByRole(role);
+// 		return resp.status(200).json(payload);
+// 	}catch(e){
+// 		return resp.status(e.statusCode).json(e);
+// 	}
+// })
 
 UserRouter.get('/:id', async(req, resp) =>{
 	const id = +req.params.id;
