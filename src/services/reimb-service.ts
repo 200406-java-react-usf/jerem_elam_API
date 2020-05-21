@@ -122,7 +122,7 @@ export class ReimbService{
 			throw new BadRequestError('Only pending Reimbursements can be updated')
 		}
 		
-		return await this.reimbRepo.updateReimb(updateReimb.reimb_id,updateReimb.amount,updateReimb.description,updateReimb.reimb_type);
+		return await this.reimbRepo.update(updateReimb.reimb_id,updateReimb.amount,updateReimb.description,updateReimb.reimb_type);
 	}
 
 	//need to add second to make sure the string given is a type in database. for now mvp
