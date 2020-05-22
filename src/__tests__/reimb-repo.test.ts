@@ -47,7 +47,7 @@ describe('reimbRepo', ()=>{
 		(mockMapper.mapUserResultSet as jest.Mock).mockClear();
 	});
 
-	test('should resolve to an array of User when getAll retrieves records from data source', async ()=>{
+	test('should resolve to an array of Reimb when getAll retrieves records from data source', async ()=>{
 		//Arrange 
 		expect.hasAssertions();
 		let mockUser = new Reimbursements(1,899.88,new Date(), new Date(), 'testing', 1, 3, 'pending', 'other');
@@ -79,7 +79,7 @@ describe('reimbRepo', ()=>{
 		expect(mockConnect).toBeCalledTimes(1);
 	});
 
-	test('should resolve to a User object when getById retrieves a record from data source', async () => {
+	test('should resolve to a Reimb object when getById retrieves a record from data source', async () => {
 		// Arrange
 		expect.hasAssertions();
 		let mockUser = new Reimbursements(1,899.88,new Date(), new Date(), 'testing', 1, 3, 'pending', 'other');
@@ -92,7 +92,7 @@ describe('reimbRepo', ()=>{
 		expect(result instanceof Users).toBe(false);
 	});
 
-	test('should return a newUser when save successfully completes', async ()=>{
+	test('should return a newReimb when save successfully completes', async ()=>{
 		//Arrange
 		expect.hasAssertions();
 		let mockReimb = new Reimbursements(1,899.88,new Date(), new Date(), 'testing', 1, 3, 'pending', 'other');
@@ -102,7 +102,7 @@ describe('reimbRepo', ()=>{
 		expect(result).toBeTruthy();
 	});
 
-	test('should return a newUser when save successfully completes', async ()=>{
+	test('should update a Reimb when save successfully completes', async ()=>{
 		//Arrange
 		expect.hasAssertions();
 		let mockReimb = new Reimbursements(1,899.88,new Date(), new Date(), 'testing', 1, 3, 'pending', 'other');
@@ -112,7 +112,7 @@ describe('reimbRepo', ()=>{
 		expect(result).toBeTruthy();
 	});
 
-	test('should return a newUser when save successfully completes', async ()=>{
+	test('should return an array of reimb when getAllById successfully completes', async ()=>{
 		//Arrange
 		expect.hasAssertions();
 		let mockReimb = new Reimbursements(1,899.88,new Date(), new Date(), 'testing', 1, 3, 'pending', 'other');
@@ -123,7 +123,7 @@ describe('reimbRepo', ()=>{
 		expect(result.length).toBe(1)
 	});
 
-	test('should return a newUser when save successfully completes', async ()=>{
+	test('should return a reimb when getReimbByUniqueKey successfully completes', async ()=>{
 		//Arrange
 		expect.hasAssertions();
 		let mockReimb = new Reimbursements(1,899.88,new Date(), new Date(), 'testing', 1, 3, 'pending', 'other');
@@ -134,7 +134,7 @@ describe('reimbRepo', ()=>{
 		expect(result.reimb_id).toBe(1)
 	});
 
-	test('should return a newUser when save successfully completes', async ()=>{
+	test('should return an array of Reimb when getAllByType successfully completes', async ()=>{
 		//Arrange
 		expect.hasAssertions();
 		let mockReimb = new Reimbursements(1,899.88,new Date(), new Date(), 'testing', 1, 3, 'pending', 'other');
@@ -145,7 +145,7 @@ describe('reimbRepo', ()=>{
 		expect(result.length).toBe(1)
 	});
 
-	test('should return a newUser when save successfully completes', async ()=>{
+	test('should return array of Reimb when getAllByStatus successfully completes', async ()=>{
 		//Arrange
 		expect.hasAssertions();
 		let mockReimb = new Reimbursements(1,899.88,new Date(), new Date(), 'testing', 1, 3, 'pending', 'other');
@@ -156,7 +156,7 @@ describe('reimbRepo', ()=>{
 		expect(result.length).toBe(1)
 	});
 
-	test('should return a newUser when save successfully completes', async ()=>{
+	test('should returns true when updateStatus successfully completes', async ()=>{
 		//Arrange
 		expect.hasAssertions();
 		let mockReimb = new Reimbursements(1,899.88,new Date(), new Date(), 'testing', 1, 3, 'pending', 'other');
@@ -164,8 +164,9 @@ describe('reimbRepo', ()=>{
 		let result = await sut.updateStatus(1,"other", 3);
 		//Assert
 		expect(result).toBeTruthy();
+		expect(result).toBe(true);
 	});
-	test('should return a newUser when save successfully completes', async ()=>{
+	test('should return true when updateStatus successfully completes', async ()=>{
 		//Arrange
 		expect.hasAssertions();
 		let mockReimb = new Reimbursements(1,899.88,new Date(), new Date(), 'testing', 1, 3, 'pending', 'other');
@@ -173,9 +174,10 @@ describe('reimbRepo', ()=>{
 		let result = await sut.updateStatus(1,"other", 3);
 		//Assert
 		expect(result).toBeTruthy();
+		expect(result).toBe(true);
 	});
 
-	test('should return a newUser when save successfully completes', async ()=>{
+	test('should return true when deleteById successfully completes', async ()=>{
 		//Arrange
 		expect.hasAssertions();
 		let mockReimb = new Reimbursements(1,899.88,new Date(), new Date(), 'testing', 1, 3, 'pending', 'other');
@@ -183,5 +185,6 @@ describe('reimbRepo', ()=>{
 		let result = await sut.deleteById(1);
 		//Assert
 		expect(result).toBeTruthy();
+
 	});
 })

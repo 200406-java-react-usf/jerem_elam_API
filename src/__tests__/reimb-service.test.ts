@@ -51,7 +51,7 @@ describe('reimbService', ()=>{
 		});
 		sut = new ReimbService(mockRepo);
 	});
-	test('should resolve to User[] (without passwords) when getAllUsers successfully retrieves users from the data source', async()=>{
+	test('should resolve to Reimb[] when getAllReimb successfully retrieves reimb data from the data source', async()=>{
 		//Arrange
 		expect.hasAssertions();
 		mockRepo.getAll = jest.fn().mockReturnValue(mockReimb);
@@ -151,7 +151,7 @@ describe('reimbService', ()=>{
 			expect(e instanceof ResourceNotFoundError).toBe(true);
 		}
 	});
-	test('should resolve to Reimb[] when getAllReimb successfully retrieves reimb from the data source', async()=>{
+	test('should resolve to Reimb[] when getAllReimbById successfully retrieves reimb from the data source', async()=>{
 		//Arrange
 		expect.hasAssertions();
 		mockRepo.getAllById = jest.fn().mockImplementation((id: number) => {
@@ -179,7 +179,7 @@ describe('reimbService', ()=>{
 		}
 	});
 
-	test('should reject with ResourceNotfound Error when getAllReimb fails to get any reimb from the data source', async() =>{
+	test('should reject with ResourceNotfound Error when getAllReimbById fails to get any reimb from the data source', async() =>{
 		//Arrange 
 		expect.assertions(1);
 		mockRepo.getAllById = jest.fn().mockReturnValue([]);
@@ -192,7 +192,7 @@ describe('reimbService', ()=>{
 		}
 	});
 
-	test('should return correct user when given correct key and value for getByUniqueKey', async () => {
+	test('should return reimb user when given correct key and value for getReimbByUniqueKey', async () => {
 
 		expect.assertions(2);
 
@@ -218,7 +218,7 @@ describe('reimbService', ()=>{
 
 	});
 
-	test('should reject with ResourceNotfound Error when getAllReimb fails to get any reimb from the data source', async() =>{
+	test('should reject with BadRequestError Error when getReimbByUniqueKey fails to get any reimb from the data source', async() =>{
 		//Arrange 
 		expect.assertions(1);
 		validator.isPropertyOf = jest.fn().mockReturnValue(true);
@@ -233,7 +233,7 @@ describe('reimbService', ()=>{
 		}
 	});
 
-	test('should reject with ResourceNotfound Error when getAllReimb fails to get any reimb from the data source', async() =>{
+	test('should reject with BadRequestError Error when getReimbByUniqueKey fails to get any reimb from the data source', async() =>{
 		//Arrange 
 		expect.assertions(1);
 		validator.isPropertyOf = jest.fn().mockReturnValue(true);
@@ -248,7 +248,7 @@ describe('reimbService', ()=>{
 		}
 	});
 
-	test('should return BadRequestError when trying to delete an id but given an invalid object', async ()=>{
+	test('should return BadRequestError when trying to deleteReimbById an id but given an invalid object', async ()=>{
 		//Arrange
 		expect.hasAssertions();
 		validator.isPropertyOf = jest.fn().mockReturnValue(false);
@@ -273,7 +273,7 @@ describe('reimbService', ()=>{
 		expect(result).toBe(true);
 	});
 
-	test('should return new user information without password when a new user is given', async()=>{
+	test('should return new reimb information when a new reimb is given', async()=>{
 		expect.hasAssertions();
 		mockRepo.saveReimb = jest.fn().mockImplementation((newReimb:Reimbursements)=>{
 			return new Promise<Reimbursements>((resolve) => {
@@ -288,7 +288,7 @@ describe('reimbService', ()=>{
 		expect(mockReimb.length).toBe(6);
 	});
 
-	test('should return BadRequestError when trying to delete an id but given an invalid object', async ()=>{
+	test('should return BadRequestError when trying to updateReimb an id but given an invalid object', async ()=>{
 		//Arrange
 		expect.hasAssertions();
 		validator.isPropertyOf = jest.fn().mockReturnValue(false);
@@ -302,7 +302,7 @@ describe('reimbService', ()=>{
 	});
 	
 
-	test('should return BadRequestError when trying to delete an id but given an invalid object', async ()=>{
+	test('should return BadRequestError when trying to updateReimb an id but given an invalid object', async ()=>{
 		//Arrange
 		expect.hasAssertions();
 		validator.isPropertyOf = jest.fn().mockReturnValue(false);
@@ -315,7 +315,7 @@ describe('reimbService', ()=>{
 		
 	});
 
-	test('should return BadRequestError when trying to delete an id but given an invalid object', async ()=>{
+	test('should return BadRequestError when trying to updateStatus an id but given an invalid object', async ()=>{
 		//Arrange
 		expect.hasAssertions();
 		validator.isPropertyOf = jest.fn().mockReturnValue(false);
@@ -328,7 +328,7 @@ describe('reimbService', ()=>{
 		
 	});
 
-	test('should resolve to Reimb[] when getAllReimb successfully retrieves reimb from the data source', async()=>{
+	test('should resolve to Reimb[] when getAllReimbByType successfully retrieves reimb from the data source', async()=>{
 		//Arrange
 		expect.hasAssertions();
 		mockRepo.getAllByType = jest.fn().mockImplementation((type: string) => {
@@ -343,7 +343,7 @@ describe('reimbService', ()=>{
 		
 	});
 
-	test('should return BadRequestError when trying to delete an id but given an invalid object', async ()=>{
+	test('should return BadRequestError when trying to getAllReimbByType an id but given an invalid string', async ()=>{
 		//Arrange
 		expect.hasAssertions();
 		validator.isValidStrings = jest.fn().mockReturnValue(false);
@@ -355,7 +355,8 @@ describe('reimbService', ()=>{
 		}
 		
 	});
-	test('should return BadRequestError when trying to delete an id but given an invalid object', async ()=>{
+
+	test('should reject with ResourceNotfound Error when getAllReimbByType fails to get any reimb from the data source', async ()=>{
 		//Arrange
 		expect.hasAssertions();
 		validator.isValidStrings = jest.fn().mockReturnValue(true);
@@ -368,7 +369,7 @@ describe('reimbService', ()=>{
 		}
 	});
 
-	test('should resolve to Reimb[] when getAllReimb successfully retrieves reimb from the data source', async()=>{
+	test('should resolve to Reimb[] when getAllReimbByStatus successfully retrieves reimb from the data source', async()=>{
 		//Arrange
 		expect.hasAssertions();
 		mockRepo.getAllByStatus = jest.fn().mockImplementation((status: string) => {
@@ -383,7 +384,7 @@ describe('reimbService', ()=>{
 		
 	});
 
-	test('should return BadRequestError when trying to delete an id but given an invalid object', async ()=>{
+	test('should return BadRequestError when trying to getAllReimbByStatus an id but given an invalid string', async ()=>{
 		//Arrange
 		expect.hasAssertions();
 		validator.isValidStrings = jest.fn().mockReturnValue(false);
@@ -396,7 +397,7 @@ describe('reimbService', ()=>{
 		
 	});
 
-	test('should return BadRequestError when trying to delete an id but given an invalid object', async ()=>{
+	test('should return ResourceNotFoundError when trying to getAllReimbByStatus an id but given an invalid status', async ()=>{
 		//Arrange
 		expect.hasAssertions();
 		validator.isValidStrings = jest.fn().mockReturnValue(true);
