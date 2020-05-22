@@ -119,7 +119,7 @@ describe('userRepo', ()=>{
 		expect(result).toBeTruthy();
 
 	});
-	test('should return true when a users is successfully deleted by the user', async()=>{
+	test('should return true when a users is successfully getUserByUniqueKey by the user', async()=>{
 		//Arrange
 		expect.hasAssertions();
 		//Act
