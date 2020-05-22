@@ -11,6 +11,9 @@ export class ReimbService{
 	constructor(private reimbRepo: ReimbRepository){
 		this.reimbRepo = reimbRepo;
 	}
+	/**
+	 * sends request to repo to get all Reimbursements data
+	 */
 	async getAllReimb():Promise<Reimbursements[]>{
 		let reimb = await this.reimbRepo.getAll();
 		if(reimb.length === 0){
@@ -18,7 +21,10 @@ export class ReimbService{
 		}
 		return reimb;
 	}
-
+/**
+ * get Reimbursements by Reimbursements id
+ * @param id 
+ */
 	async getReimbById(id:number): Promise<Reimbursements>{
 		if(!isValidId(id)){
 			throw new BadRequestError();
@@ -41,6 +47,15 @@ export class ReimbService{
 		return reimbs
 
 	}
+
+	/**
+	 * sends request to get reimbbyUnique key. 
+	 * checks to see if object is a key of the model
+	 * if the key is an id then getReimbById
+	 * checks to see if string is valid 
+	 * once something is returned checks to see if it is an empty object
+	 * @param queryObj 
+	 */
 	async getReimbByUniqueKey(queryObj: any): Promise<Reimbursements>{
 		
 		let queryKeys = Object.keys(queryObj);
@@ -63,6 +78,10 @@ export class ReimbService{
 		return reimb;
 	}
 
+	/**
+	 * Deletes user when id is given.
+	 * @param id 
+	 */
 	async deleteReimbById(id: object): Promise<boolean>{
 		let keys = Object.keys(id);
 		if(!keys.every(key=> isPropertyOf(key, Reimbursements))){
@@ -77,6 +96,10 @@ export class ReimbService{
 		return true;
 	}
 
+	/**
+	 * add new reimb when given a reimb object
+	 * @param newReimb 
+	 */
 	async addNewReimb(newReimb: Reimbursements): Promise<Reimbursements>{
 		if(!isValidObject(newReimb, 'reimb_id', 'resolved', 'resolver_id', 'submitted', 'reimb_status')){
 			throw new BadRequestError('Invalid Property values found in provided reimbursement');
@@ -88,7 +111,12 @@ export class ReimbService{
 		const newReimbursement = await this.reimbRepo.saveReimb(newReimb);
 		return newReimbursement;
 	}
-
+	/**
+	 * update the status of the reimbursements
+	 * checks to see if object is valid, 
+	 * checks to see if isPropertyOf is valid
+	 * @param updateReimb 
+	 */
 	async updateStatus(updateReimb: Reimbursements): Promise<boolean>{
 		updateReimb.reimb_id = +updateReimb.reimb_id;
 		if(!isValidObject(updateReimb, 'resolved','submitted', 'amount', 'submitted', 'resolved', 'description', 'author_id', 'reimb_type')){

@@ -7,6 +7,9 @@ import { isPropertyOf, isValidObject } from '../util/validators';
 export class ReimbRepository{
 	baseQuery = `select * from full_reimbursements_info`;
 
+	/**
+	 * method used to get all Reimbursements directly from the database
+	 */
 	async getAll(): Promise<Reimbursements[]>{
 		let client: PoolClient;
 		try{
@@ -21,6 +24,10 @@ export class ReimbRepository{
 		}
 	}
 
+	/**
+	 * get 1 Reimbursements based of the reimb_id directly from the database
+	 * @param id 
+	 */
 	async getById(id: number): Promise<Reimbursements>{
 		let client: PoolClient;
 		try{
@@ -35,6 +42,10 @@ export class ReimbRepository{
 		}
 	}
 
+	/**
+	 * gets all the Reimbursements based off the Id of the user. 
+	 * @param id 
+	 */
 	async getAllById(id: number): Promise<Reimbursements[]>{
 		let client: PoolClient;
 		try{
@@ -50,6 +61,11 @@ export class ReimbRepository{
 		}
 	}
 
+	/**
+	 * get 1 Reimbursements based off the unique keys of the Reimbursements
+	 * @param key 
+	 * @param val 
+	 */
 	async getReimbByUniqueKey(key: string, val: string): Promise<Reimbursements>{
 		let client: PoolClient
 		try{
@@ -64,6 +80,10 @@ export class ReimbRepository{
 		}
 	}
 
+	/**
+	 * get all the Reimbursements based on the type of Reimbursements
+	 * @param type 
+	 */
 	async getAllByType(type: string): Promise<Reimbursements[]>{
 		let client: PoolClient;
 		try{
@@ -78,6 +98,10 @@ export class ReimbRepository{
 		}
 	}
 
+	/**
+	 * get all Reimbursements based off th status of the Reimbursements
+	 * @param status 
+	 */
 	async getAllByStatus(status: string): Promise<Reimbursements[]>{
 		let client: PoolClient;
 		try{
@@ -92,6 +116,12 @@ export class ReimbRepository{
 		}
 	}
 
+	/**
+	 * Updates the user state. Only need the reimb_id, the updated status, and the resolver_id
+	 * @param reimb_id 
+	 * @param updateStatus 
+	 * @param resolver_id 
+	 */
 	async updateStatus(reimb_id: number, updateStatus: string, resolver_id: number):  Promise<boolean>{
 		let client: PoolClient;
 		try{
@@ -108,6 +138,13 @@ export class ReimbRepository{
 		}
 	}
 
+	/**
+	 * updates the Reimbursements
+	 * @param reimb_id 
+	 * @param amount 
+	 * @param description 
+	 * @param reimb_type 
+	 */
 	async update(reimb_id: number,amount: number, description: string, reimb_type: string): Promise<boolean>{
 		let client: PoolClient;
 		try{
@@ -123,6 +160,11 @@ export class ReimbRepository{
 		}
 	}
 
+	/**
+	 * saves a brand new reimb to the database. 
+	 * Returns the reimb when completed.
+	 * @param reimb 
+	 */
 	async saveReimb(reimb: Reimbursements): Promise<Reimbursements>{
 		let client: PoolClient;
 		try{
@@ -141,7 +183,11 @@ export class ReimbRepository{
 		}
 	}
 
-
+	/**
+	 * deletes a user by given a user Id
+	 * returns true when successfully updated
+	 * @param id 
+	 */
 	async deleteById(id:number): Promise<boolean>{
 		let client: PoolClient;
 		try{

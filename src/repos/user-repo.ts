@@ -8,6 +8,9 @@ export class UserRepository{
 
 	baseQuery = `select * from full_user_info`;
 
+	/**
+	 * returns an array of all Users when invoked
+	 */
 	async getAll(): Promise<Users[]>{
 		let client: PoolClient;
 		try{
@@ -21,6 +24,11 @@ export class UserRepository{
 			client && client.release();
 		}
 	}
+	/**
+	 * returns an array of all Users when Given a user role
+	 * @param role 
+	 * this is not being used
+	 */
 	async getAllByRole(role:string): Promise<Users[]>{
 		let client: PoolClient;
 		
@@ -36,6 +44,10 @@ export class UserRepository{
 		}
 	}
 
+	/**
+	 * Returns a single user based off the user ID given
+	 * @param id 
+	 */
 	async getById(id: number): Promise<Users>{
 		let client: PoolClient;
 		try{
@@ -49,6 +61,11 @@ export class UserRepository{
 			client && client.release();
 		}
 	}
+
+	/**
+	 * saves new user when a User object is given
+	 * @param newUser 
+	 */
 	async save(newUser: Users):Promise<Users>{		
 		let client: PoolClient; 
 		try{
@@ -66,6 +83,11 @@ export class UserRepository{
 		}
 	}
 
+	/**
+	 * returns a single user given the a unique key and value of the object
+	 * @param key 
+	 * @param val 
+	 */
 	async getUserByUniqueKey(key: string, val: string): Promise<Users>{
 		let client: PoolClient
 		try{
@@ -80,6 +102,11 @@ export class UserRepository{
 		}
 	}
 
+	/**
+	 * updates user when given a user object
+	 * returns true when update is finished
+	 * @param updatedUser 
+	 */
 	async update(updatedUser: Users): Promise<boolean>{
 		updatedUser.ers_user_id = +updatedUser.ers_user_id;
 		let client: PoolClient;
@@ -99,6 +126,11 @@ export class UserRepository{
 			client && client.release();
 		}
 	}
+
+	/**
+	 * deletes user from database given user Id
+	 * @param id 
+	 */
 	async deleteById(id:number): Promise<boolean>{
 		let client: PoolClient;
 		try{
@@ -112,6 +144,13 @@ export class UserRepository{
 			client && client.release();
 		}
 	}
+
+	/**
+	 * gets user information based off their username and password
+	 * return 
+	 * @param username 
+	 * @param password 
+	 */
 	async getUserByCreds(username: string, password: string): Promise<Users> {
 		let client: PoolClient;
 		try {
